@@ -8,7 +8,7 @@ from sqlalchemy.sql.expression import select
 from sqlalchemy.schema import DropTable, CreateTable
 from sqlalchemy.ext.declarative import DeferredReflection
 from db_api.config import Base, async_session, async_engine
-from db_api.models.user import User, Group, GroupUser
+from db_api.models.user import User, Group, GroupUser, Vk_tokens
 
 
 
@@ -106,8 +106,31 @@ async def drop_all_tables():
         # Фиксация изменений
         await session.commit()
 
+############### TOKENS #################
+
+async def add_token_to_database(token):
+    async with AsyncSession(async_engine) as session:
+        # Создание нового экземпляра класса Vk_tokens
+        new_token = Vk_tokens(token=token, status='active')
+
+        # Добавление нового токена в базу данных
+        session.add(new_token)
+        await session.commit()
+
+    # Закрытие соединения
+    await async_engine.dispose()
+
+async def get_random_token():
+    async with AsyncSession(async_engine) as session:
+        # Получение случайного токена из базы данных
+        random_token = await session.execute(select(Vk_tokens.token).order_by(func.random()))
+        return random_token.scalar_one()
+    await async_engine.dispose()
 
 
 
-# if __name__ == '__main__':
-#     asyncio.run(create_tables())
+
+
+
+if __name__ == '__main__':
+    asyncio.run(create_tables())

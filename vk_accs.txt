@@ -1,0 +1,6 @@
+Данные для входа в VKontakte:
+Логин: 5435848461009
+Пароль: tl35O5o1EO2m3a3
+Логин:Пароль:Токен ВК: 5435848461009:tl35O5o1EO2m3a3:vk1.a.-YgoyTfIuse34uuCBMjMFipwe3TJolwMWWniyniUq2qKNL7wAQHUZpRsdS3HxwT9hh6LzkfPze08cZ3y-X1NrhaAy2n8Y7X8RpHWUbuslskkCwPrXxCIV4jwc194wUAQHAc6299DLSFAV-QCox7tAsJ5aIoCicvjQ7mzu1q2rFZNPUIw3HzRfVpVUy9FuI0E
+Токен ВК: vk1.a.-YgoyTfIuse34uuCBMjMFipwe3TJolwMWWniyniUq2qKNL7wAQHUZpRsdS3HxwT9hh6LzkfPze08cZ3y-X1NrhaAy2n8Y7X8RpHWUbuslskkCwPrXxCIV4jwc194wUAQHAc6299DLSFAV-QCox7tAsJ5aIoCicvjQ7mzu1q2rFZNPUIw3HzRfVpVUy9FuI0E
+User-Agent: VKAndroidApp/8.15.1-15289 (Android 7.1.2; SDK 25; armeabi-v7a; Asus ASUS_Z01QD; ru; 1280x720)

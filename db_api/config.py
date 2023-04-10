@@ -1,4 +1,6 @@
 import os
+
+from aiogram import Bot, types
 from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker, declarative_base
@@ -20,3 +22,4 @@ async_session = sessionmaker(async_engine, class_=AsyncSession, expire_on_commit
 
 # Создание базового класса для моделей данных
 Base = declarative_base()
+bot = Bot(token=os.getenv("BOT_TOKEN"), parse_mode=types.ParseMode.HTML)

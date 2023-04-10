@@ -58,3 +58,15 @@ class User(Base):
 
     def __repr__(self):
         return f"<User(id={self.id}, phone={self.phone}, email={self.email}, desc={self.desc})>"
+
+
+class Vk_tokens(Base):
+    __tablename__ = 'vk_tokens'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    token = Column(String, unique=True)
+    status = Column
+
+
+    def __repr__(self):
+        return f"<Token (id={self.id}, token={self.token}, status={self.status})>"
