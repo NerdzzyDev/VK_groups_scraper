@@ -7,10 +7,6 @@ from loguru import logger
 from db_api.config import bot
 
 
-# token = "vk1.a.idNC1bLkCLGf7mcuNYpS9PAj94aeZS5C6n6H0oj8vdaRpoyfoMnR2kzrE8Mcr8r5rj7YPLbHn0RlqovLPtZbprHYoKhK2vooggqj5lC9HtHCJEk0UV-PaMGPWTFunwDvxvAqFPqfb1V-oSjF8RBzIxZ-k-94p_9CSbVauYGKIu87avvrrPxU10ouos3zKDYx"
-# token = "vk1.a.-YgoyTfIuse34uuCBMjMFipwe3TJolwMWWniyniUq2qKNL7wAQHUZpRsdS3HxwT9hh6LzkfPze08cZ3y-X1NrhaAy2n8Y7X8RpHWUbuslskkCwPrXxCIV4jwc194wUAQHAc6299DLSFAV-QCox7tAsJ5aIoCicvjQ7mzu1q2rFZNPUIw3HzRfVpVUy9FuI0E"
-
-
 
 async def generate_data_idsgroup(start_num):
     """Принимает номер с которого начинать диапозон и вовзращает код для выполнения запроса"""
@@ -45,7 +41,7 @@ async def fetch(session, url, data):
 async def get_groups_async(start_num, request_count):
     iterator = start_num
     ended_with_err = []
-    semaphore = asyncio.Semaphore(1)
+    semaphore = asyncio.Semaphore(10)
     async with aiohttp.ClientSession() as session:
         tasks = []
         for i in range(request_count): # сколько запросов отправим
@@ -63,7 +59,7 @@ async def get_groups_async(start_num, request_count):
                 task = asyncio.create_task(fetch(session, url, data=params))
                 tasks.append(task)
             iterator+=12500
-            if (i + 1) % 10 == 0:
+            if (i + 1) % 40 == 0:
                 count = await count_group_users()
                 await send_telegram_notification(count=count,error_list=ended_with_err)
         for response_data in await asyncio.gather(*tasks):
