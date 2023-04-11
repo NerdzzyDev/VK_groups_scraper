@@ -15,7 +15,7 @@ db_password = os.getenv("DB_PASSWORD")
 database = os.getenv("DATABASE")
 
 # Создание асинхронного движка SQLAlchemy для PostgreSQL
-async_engine = create_async_engine(f"postgresql+asyncpg://{db_user}:{db_password}@{db_host}/{database}")
+async_engine = create_async_engine(f"postgresql+asyncpg://{db_user}:{db_password}@{db_host}/{database}", echo=True)
 
 # Создание асинхронной фабрики сессий SQLAlchemy
 async_session = sessionmaker(async_engine, class_=AsyncSession, expire_on_commit=False, autoflush=False)
@@ -23,3 +23,5 @@ async_session = sessionmaker(async_engine, class_=AsyncSession, expire_on_commit
 # Создание базового класса для моделей данных
 Base = declarative_base()
 bot = Bot(token=os.getenv("BOT_TOKEN"), parse_mode=types.ParseMode.HTML)
+
+get_token_url = "https://oauth.vk.com/authorize?client_id=51603142 &display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=friends,groups,offline&response_type=token&v=5.52"
