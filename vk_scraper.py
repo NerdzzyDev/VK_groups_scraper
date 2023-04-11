@@ -29,13 +29,13 @@ async def send_telegram_notification(count,i, error_list, token_count):
            f"Всего собранно:\n" \
            f"<code>{i}</code>  / 220000000\n\n" \
            f"Групп в БД:\n" \
-           f"<code>{count}<code>" \
-           f"Токенов осталось <code>{token_count}</code>" \
+           f"<code>{count}</code>" \
+           f"Токенов осталось <code>{token_count}</code>\n\n" \
            f"Не удалось собрать: {error_list}"
-    try:
-        await bot.send_message(chat_id=-935547037, text=text)
-    except:
-        pass
+    # try:
+    await bot.send_message(chat_id=-935547037, text=text)
+    # except:
+    #     pass
 
 
 
@@ -66,7 +66,7 @@ async def get_groups_async(start_num, request_count):
                 task = asyncio.create_task(fetch(session, url, data=params))
                 tasks.append(task)
             iterator += 10000
-            if (i + 1) % 40 == 0:
+            if (i + 1) % 1 == 0:
                 count = await count_group_users()
                 token_count = await count_tokens()
                 await send_telegram_notification(count=count,i=iterator, error_list=ended_with_err, token_count =token_count)
@@ -85,7 +85,7 @@ async def get_groups_async(start_num, request_count):
 async def get_groups_async(start_num, request_count):
     iterator = start_num
     ended_with_err = []
-    semaphore = asyncio.Semaphore(10)
+    semaphore = asyncio.Semaphore(1)
     async with aiohttp.ClientSession() as session:
         tasks = []
         for i in range(request_count):  # сколько запросов отправим
@@ -103,12 +103,12 @@ async def get_groups_async(start_num, request_count):
                 task = asyncio.create_task(fetch(session, url, data=params))
                 tasks.append(task)
 
-            if len(tasks) >= 10:
+            if len(tasks) >= 1:
                 for response_data in await asyncio.gather(*tasks):
                     iterator += 10000
                     ended_with_err += await add_group_user_from_json(response_data, iterator, token=token)
                     count = await count_group_users()
-                    if (i + 1) % 40 == 0:
+                    if (i + 1) % 1 == 0:
                         token_count = await count_tokens()
                         await send_telegram_notification(count=count,i=iterator, error_list=ended_with_err, token_count=token_count)
                     logger.info(f'Total number of records in group_user table: {count}')
@@ -119,7 +119,7 @@ async def get_groups_async(start_num, request_count):
                 iterator += 10000
                 ended_with_err += await add_group_user_from_json(response_data, iterator, token=token)
                 count = await count_group_users()
-                if (i + 1) % 40 == 0:
+                if (i + 1) % 1 == 0:
                     token_count = await count_tokens()
                     await send_telegram_notification(count=count,i=iterator, error_list=ended_with_err, token_count=token_count)
                 logger.info(f'Total number of records in group_user table: {count}')
@@ -134,7 +134,9 @@ async def get_groups_async(start_num, request_count):
 if __name__ == '__main__':
     # 5112500
     start_time = time.time()
-    asyncio.run(get_groups_async(start_num=5112500, request_count=2))
+    # asyncio.run(get_groups_async(start_num=5112500, request_count=20))
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(get_groups_async(start_num=5112500, request_count=2))
     # asyncio.run(send_telegram_notification())
     end_time = time.time()
     elapsed_time = end_time - start_time
