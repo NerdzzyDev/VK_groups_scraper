@@ -32,10 +32,10 @@ async def send_telegram_notification(count,i, error_list, token_count):
            f"<code>{count}</code>" \
            f"Токенов осталось <code>{token_count}</code>\n\n" \
            f"Не удалось собрать: {error_list}"
-    # try:
-    await bot.send_message(chat_id=-935547037, text=text)
-    # except:
-    #     pass
+    try:
+        await bot.send_message(chat_id=-935547037, text=text)
+    except:
+        pass
 
 
 
@@ -66,7 +66,7 @@ async def get_groups_async(start_num, request_count):
                 task = asyncio.create_task(fetch(session, url, data=params))
                 tasks.append(task)
             iterator += 10000
-            if (i + 1) % 1 == 0:
+            if (i + 1) % 50 == 0:
                 count = await count_group_users()
                 token_count = await count_tokens()
                 await send_telegram_notification(count=count,i=iterator, error_list=ended_with_err, token_count =token_count)
@@ -108,7 +108,7 @@ async def get_groups_async(start_num, request_count):
                     iterator += 10000
                     ended_with_err += await add_group_user_from_json(response_data, iterator, token=token)
                     count = await count_group_users()
-                    if (i + 1) % 1 == 0:
+                    if (i + 1) % 50 == 0:
                         token_count = await count_tokens()
                         await send_telegram_notification(count=count,i=iterator, error_list=ended_with_err, token_count=token_count)
                     logger.info(f'Total number of records in group_user table: {count}')
@@ -119,7 +119,7 @@ async def get_groups_async(start_num, request_count):
                 iterator += 10000
                 ended_with_err += await add_group_user_from_json(response_data, iterator, token=token)
                 count = await count_group_users()
-                if (i + 1) % 1 == 0:
+                if (i + 1) % 50 == 0:
                     token_count = await count_tokens()
                     await send_telegram_notification(count=count,i=iterator, error_list=ended_with_err, token_count=token_count)
                 logger.info(f'Total number of records in group_user table: {count}')
